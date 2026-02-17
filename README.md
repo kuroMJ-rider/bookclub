@@ -1,47 +1,36 @@
-## 📚 데이터 인류학 살롱 (Data Humanists Book Club)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-데이터 분석가에게 필요한 인문학적 통찰력을 기르고, 강화되는 소프트 스킬(Soft Skills) 검증에 대비하기 위한 지식 아카이빙 도구입니다. 단순히 정보를 저장하는 것을 넘어, 분석가의 시각으로 맥락을 읽고 실전 인터뷰 답변으로 연결하는 프로세스를 지향합니다.
+## Getting Started
 
----
+First, run the development server:
 
-## 📝 소개 (Introduction)
-데이터 분석의 본질은 숫자 뒤에 숨겨진 '사람의 이야기'를 읽어내는 것입니다. 본 앱은 분석가의 비판적 사고를 확장하고 이를 커뮤니케이션 역량으로 증명할 수 있도록 돕습니다.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-- **인류학적 통찰력 (Anthropological Insight)**: 독서 중 발견한 통찰을 단순 기록이 아닌, 데이터 분석가의 시각으로 재해석하여 사고의 깊이를 더합니다.
-- **인터뷰 답변 매칭 (Interview Prep)**: 최근 채용 시장에서 중요해진 소프트 스킬 역량을 증명하기 위해, 책의 인사이트를 실제 면접 질문과 매칭하여 나만의 답변 리스트를 구축합니다.
-- **유연한 데이터 수집**: 정해진 틀에 갇히지 않고, 인상 깊은 문장과 생각을 노션 페이지 내부에 자유롭게 기록하여 '지식의 맥락'을 온전히 보존합니다.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
----
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## 🛠 기술 스택 (Tech Stack)
-- **Framework**: Next.js (App Router)
-- **Database**: Supabase
-- **Integration**: Notion API (v2025-09-03)
-- **Design Concept**: 소프트 스킬 강화 및 인문학적 데이터 자산화
-- **Font**: Nanum Barun Gothic
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
----
+## Learn More
 
-## ⚙️ 설정 방법 (Getting Started)
+To learn more about Next.js, take a look at the following resources:
 
-이 앱은 독서 모임을 위해 읽은 책과 관련된 내용, 참조하면 좋을 자료 등을 입력, 삭제하는 것이 가능하고 기록된 내용을 개인 노션에 저장할 수 있습니다. 개인 노션에 저장하기 위해 다음 환경 변수와 노션 설정이 필요합니다.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-### 1. 노션 연동 설정
-- **Notion API Key**: https://developers.notion.com/guides/get-started/getting-started의 가이드를 참조하세요. 개별 노션 페이지에 book_title이라는 데이터베이스를 만들고 API 통합을 생성합니다.
-- **Database ID**: 노션 데이터베이스를 '전체 페이지로 열기' 한 후 주소창의 32자리 ID를 입력합니다. 노션 데이터베이스 소스 ID를 입력해줍니다. 
-- **연결 추가**: 노션 페이지 설정(`...`)에서 생성한 통합(Integration)을 반드시 '연결 추가' 해야 합니다.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-### 2. 데이터베이스 속성(Property) 매핑
-현재 앱은 데이터의 유연한 수집을 위해 **'페이지 제목 + 본문 기록'** 방식을 사용합니다. 
-노션 데이터베이스에 아래 이름과 유형의 속성이 존재해야 데이터가 정상적으로 저장됩니다.
+## Deploy on Vercel
 
-| 속성 이름 | 유형 |
-| :--- | :--- |
-| `book_title` | text | 
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
----
-
-## 👩‍💻 Author
-- **MJ (Mijeong Jeon)**
-- 코드잇 12기 데이터 분석가 부트캠프 수강 중
-- "데이터 인류학" 프로젝트 진행 중
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
