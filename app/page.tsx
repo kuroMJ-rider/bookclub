@@ -80,23 +80,23 @@ function HomeTabContent() {
         숫자 너머의 사람을 읽는 분석가들의 공간
       </p>
 
-      <div className="space-y-4">
-        <h3 className="text-sm font-semibold text-foreground">3대 운영 원칙</h3>
-        <ul className="space-y-3">
-          <li className="rounded-lg border border-border bg-card p-3">
-            <span className="text-sm font-medium text-foreground">Burden Zero</span>
+      <div className="space-y-4 text-center">
+        <h3 className="text-sm font-semibold text-foreground">북클럽 3대 운영 원칙</h3>
+        <ul className="space-y-4">
+          <li className="text-center">
+            <span className="text-sm font-medium text-foreground">1. Burden Zero</span>
             <p className="mt-0.5 text-sm text-muted-foreground">
               완독 못 해도 OK! 문장 하나면 충분해요.
             </p>
           </li>
-          <li className="rounded-lg border border-border bg-card p-3">
-            <span className="text-sm font-medium text-foreground">Output First</span>
+          <li className="text-center">
+            <span className="text-sm font-medium text-foreground">2. Output First</span>
             <p className="mt-0.5 text-sm text-muted-foreground">
               이 통찰을 내 포트폴리오에 어떻게 녹일까?
             </p>
           </li>
-          <li className="rounded-lg border border-border bg-card p-3">
-            <span className="text-sm font-medium text-foreground">Active Archiving</span>
+          <li className="text-center">
+            <span className="text-sm font-medium text-foreground">3. Active Archiving</span>
             <p className="mt-0.5 text-sm text-muted-foreground">
               정성 답변 데이터베이스 만들기.
             </p>
@@ -108,7 +108,7 @@ function HomeTabContent() {
         href={NOTION_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-primary px-5 py-3.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:opacity-90 hover:shadow"
       >
         우리 모임 노션 바로가기
         <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
