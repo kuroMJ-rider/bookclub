@@ -72,3 +72,33 @@ create policy "Allow all for insights"
 
 4. **환경 변수가 안 보임**  
    → `.env.local` 수정 후 **개발 서버를 재시작**해야 합니다. (`npm run dev` 다시 실행)
+
+## 3. 함께 읽은 도서 목록 (`books`)
+
+저장소 탭의 **함께 읽은 도서** 메뉴에서 사용합니다.  
+"Could not find the table 'public.books'" 오류가 나면 아래 SQL을 **Supabase 대시보드 → SQL Editor**에서 실행하세요.
+
+```sql
+create table public.books (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  author text default '',
+  publisher text default '',
+  url text default '',
+  created_at timestamptz default now()
+);
+
+alter table public.books enable row level security (RLS);
+
+create policy "Allow all for books"
+  on public.books for all
+  using (true)
+  with check (true);
+```
+
+**이미 `books` 테이블을 만들었는데 "column books.url does not exist" 오류가 나는 경우**  
+아래만 SQL Editor에서 실행해 `url` 컬럼을 추가하세요.
+
+```sql
+alter table public.books add column if not exists url text default '';
+```

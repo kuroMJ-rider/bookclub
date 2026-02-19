@@ -3,11 +3,27 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary: #0f766e;
+  --primary-foreground: #f0fdfa;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --card: #ffffff;
+  --accent: #0d9488;
+  --destructive: #dc2626;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-accent: var(--accent);
+  --color-destructive: var(--destructive);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -16,6 +32,10 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    --border: #3f3f46;
+    --card: #18181b;
   }
 }
 
@@ -23,4 +43,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* 다크 모드 가독성: input placeholder 명암비 */
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8;
+}
+@media (prefers-color-scheme: dark) {
+  input::placeholder,
+  textarea::placeholder {
+    color: #94a3b8;
+  }
 }
