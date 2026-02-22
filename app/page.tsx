@@ -19,6 +19,7 @@ import {
   PlusCircle,
   Loader2,
   Trash2,
+  Check,
 } from "lucide-react"
 
 const NOTION_API_KEY_KEY = "notion_api_key"
@@ -117,18 +118,21 @@ function HomeTabContent() {
   )
 }
 
+const JOURNEY_YEAR = 2026
+
 const journeySteps = [
   {
     type: "kickoff" as const,
     label: "OT: Kick-off",
     date: "2/22 (일)",
-    status: "준비 중",
+    dates: [new Date(JOURNEY_YEAR, 1, 22)],
   },
   {
     type: "stage" as const,
     stage: 1,
     name: "관찰과 맥락",
     date: "3/08",
+    dates: [new Date(JOURNEY_YEAR, 2, 8)],
     books: [
       { title: "《씩 데이터》", main: true },
       { title: "《데이터 읽기의 기술》", main: false },
@@ -139,6 +143,7 @@ const journeySteps = [
     stage: 2,
     name: "세상을 보는 눈",
     date: "3/22, 4/05",
+    dates: [new Date(JOURNEY_YEAR, 2, 22), new Date(JOURNEY_YEAR, 3, 5)],
     books: [
       { title: "《팩트풀니스》", main: true },
       { title: "《세대 감각》", main: false },
@@ -150,6 +155,7 @@ const journeySteps = [
     stage: 3,
     name: "비판적 시각",
     date: "4/19, 5/03",
+    dates: [new Date(JOURNEY_YEAR, 3, 19), new Date(JOURNEY_YEAR, 4, 3)],
     books: [
       { title: "《대량살상 수학무기》", main: true },
       { title: "《가장 인간적인 미래》", main: false },
@@ -161,9 +167,23 @@ const journeySteps = [
     stage: 4,
     name: "나만의 중심",
     date: "5/17, 5/31",
+    dates: [new Date(JOURNEY_YEAR, 4, 17), new Date(JOURNEY_YEAR, 4, 31)],
     books: [{ title: "《그냥 하지 말라》", main: true }],
   },
 ]
+
+function getStepStatus(dates: Date[]): "완료" | "진행 중" | "준비 중" {
+  const now = new Date()
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const lastDate = dates[dates.length - 1]
+  const firstDate = dates[0]
+  const lastDateOnly = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate())
+  const firstDateOnly = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate())
+
+  if (lastDateOnly < today) return "완료"
+  if (firstDateOnly <= today && today <= lastDateOnly) return "진행 중"
+  return "준비 중"
+}
 
 function JourneyTabContent() {
   return (
@@ -174,70 +194,109 @@ function JourneyTabContent() {
         {/* Vertical line */}
         <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-slate-200 dark:bg-slate-700" aria-hidden />
 
-        {journeySteps.map((step, index) => (
-          <div key={index} className="relative flex gap-4 pl-0">
-            {/* Node */}
-            <div
-              className={`relative z-10 mt-1.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 ${
-                step.type === "kickoff"
-                  ? "border-primary bg-primary/10"
-                  : "border-primary bg-white dark:bg-slate-950"
-              }`}
-            >
-              {step.type === "kickoff" ? (
-                <span className="text-xs" aria-hidden>🎯</span>
-              ) : (
-                <span className="text-[10px] font-bold text-primary">
-                  {step.stage}
-                </span>
-              )}
-            </div>
+        {journeySteps.map((step, index) => {
+          const status = getStepStatus(step.dates)
+          const isDone = status === "완료"
+          const isActive = status === "진행 중"
 
-            {/* Content card */}
-            <div className="min-w-0 flex-1 pb-6">
-              {step.type === "kickoff" ? (
-                <div className="rounded-lg border-2 border-primary/50 bg-primary/5 p-3 dark:bg-primary/10">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-base font-extrabold text-slate-900 dark:text-slate-100">
-                      {step.label}
-                    </span>
-                    <span className="shrink-0 rounded-full bg-primary/20 px-2 py-0.5 text-xs font-medium text-primary dark:text-primary-foreground/90">
-                      {step.status}
-                    </span>
+          return (
+            <div key={index} className={`relative flex gap-4 pl-0 ${isDone ? "opacity-60" : ""}`}>
+              {/* Node */}
+              <div
+                className={`relative z-10 mt-1.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 ${
+                  isDone
+                    ? "border-slate-300 bg-slate-200 dark:border-slate-600 dark:bg-slate-700"
+                    : isActive
+                      ? "border-orange-400 bg-orange-100 dark:border-orange-400 dark:bg-orange-950"
+                      : step.type === "kickoff"
+                        ? "border-primary bg-primary/10"
+                        : "border-primary bg-white dark:bg-slate-950"
+                }`}
+              >
+                {isDone ? (
+                  <Check className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
+                ) : step.type === "kickoff" ? (
+                  <span className="text-xs" aria-hidden>🎯</span>
+                ) : (
+                  <span className={`text-[10px] font-bold ${isActive ? "text-orange-600 dark:text-orange-400" : "text-primary"}`}>
+                    {step.stage}
+                  </span>
+                )}
+              </div>
+
+              {/* Content card */}
+              <div className="min-w-0 flex-1 pb-6">
+                {step.type === "kickoff" ? (
+                  <div className={`rounded-lg border-2 p-3 ${
+                    isDone
+                      ? "border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-900"
+                      : isActive
+                        ? "border-orange-400 bg-orange-50 ring-2 ring-orange-300 dark:border-orange-500 dark:bg-orange-950 dark:ring-orange-700"
+                        : "border-primary/50 bg-primary/5 dark:bg-primary/10"
+                  }`}>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-base font-extrabold text-slate-900 dark:text-slate-100">
+                        {step.label}
+                      </span>
+                      <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
+                        isDone
+                          ? "bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
+                          : isActive
+                            ? "bg-orange-200 text-orange-700 dark:bg-orange-800 dark:text-orange-300"
+                            : "bg-primary/20 text-primary dark:text-primary-foreground/90"
+                      }`}>
+                        {status}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{step.date}</p>
                   </div>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{step.date}</p>
-                </div>
-              ) : (
-                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-900">
-                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                    <span className="text-xs font-bold text-primary">
-                      {step.stage}단계
-                    </span>
-                    <span className="text-base font-extrabold text-slate-900 dark:text-slate-100">
-                      {step.name}
-                    </span>
+                ) : (
+                  <div className={`rounded-lg border p-3 ${
+                    isDone
+                      ? "border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-900"
+                      : isActive
+                        ? "border-orange-300 bg-orange-50 ring-2 ring-orange-300 shadow-md dark:border-orange-500 dark:bg-orange-950 dark:ring-orange-700"
+                        : "border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-900"
+                  }`}>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                      <span className={`text-xs font-bold ${isDone ? "text-slate-400 dark:text-slate-500" : isActive ? "text-orange-600 dark:text-orange-400" : "text-primary"}`}>
+                        {step.stage}단계
+                      </span>
+                      <span className="text-base font-extrabold text-slate-900 dark:text-slate-100">
+                        {step.name}
+                      </span>
+                      <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                        isDone
+                          ? "bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
+                          : isActive
+                            ? "bg-orange-200 text-orange-700 dark:bg-orange-800 dark:text-orange-300"
+                            : "bg-primary/10 text-primary/70"
+                      }`}>
+                        {status}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{step.date}</p>
+                    <ul className="mt-2 space-y-1">
+                      {step.books.map((book, i) => (
+                        <li
+                          key={i}
+                          className={`flex items-center gap-1.5 text-sm ${isDone ? "text-slate-500 dark:text-slate-400" : "text-slate-900 dark:text-slate-100"}`}
+                        >
+                          {book.main && (
+                            <span className="text-base leading-none" aria-hidden>
+                              {isDone ? "✅" : "📘"}
+                            </span>
+                          )}
+                          <span className={isDone ? "line-through decoration-slate-300 dark:decoration-slate-600" : ""}>{book.title}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{step.date}</p>
-                  <ul className="mt-2 space-y-1">
-                    {step.books.map((book, i) => (
-                      <li
-                        key={i}
-                        className="flex items-center gap-1.5 text-sm text-slate-900 dark:text-slate-100"
-                      >
-                        {book.main && (
-                          <span className="text-base leading-none" aria-hidden>
-                            📘
-                          </span>
-                        )}
-                        <span>{book.title}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </section>
   )
@@ -659,7 +718,7 @@ function ArchiveTabContent() {
                     if (now - exportThrottleRef.current < 800) return
                     exportThrottleRef.current = now
                     console.log("버튼 클릭됨!")
-                    if (!exportingId) exportToNotion("quote", { bookTitle: item.bookTitle, quote: item.quote, thoughts: item.thought }, `quote-${item.id}`)
+                    if (!exportingId) exportToNotion("quote", { bookTitle: item.bookTitle, quote: item.quote, thoughts: item.thought, author: item.author }, `quote-${item.id}`)
                   }}
                   onTouchEnd={(e) => {
                     e.preventDefault()
@@ -667,7 +726,7 @@ function ArchiveTabContent() {
                     if (now - exportThrottleRef.current < 800) return
                     exportThrottleRef.current = now
                     console.log("버튼 터치됨!")
-                    if (!exportingId) exportToNotion("quote", { bookTitle: item.bookTitle, quote: item.quote, thoughts: item.thought }, `quote-${item.id}`)
+                    if (!exportingId) exportToNotion("quote", { bookTitle: item.bookTitle, quote: item.quote, thoughts: item.thought, author: item.author }, `quote-${item.id}`)
                   }}
                 >
                   {exportingId === `quote-${item.id}` ? (

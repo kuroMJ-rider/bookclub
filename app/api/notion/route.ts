@@ -157,9 +157,10 @@ export async function POST(request: Request) {
     }
 
     if (type === "quote") {
-      const { bookTitle = "", quote = "", thoughts = "" } = payload
+      const { bookTitle = "", quote = "", thoughts = "", author = "" } = payload
       const quoteVal = String(quote ?? "").trim()
       const thoughtVal = String(thoughts ?? "").trim()
+      const authorVal = String(author ?? "").trim()
 
       if (!quoteVal && !thoughtVal) {
         return NextResponse.json(
@@ -184,10 +185,13 @@ export async function POST(request: Request) {
         [titleProp]: { title: richText(titleText) },
       }
       if (quoteVal) {
-        properties.quote = { rich_text: richText(quoteVal) }
+        properties["quate"] = { rich_text: richText(quoteVal) }
       }
       if (thoughtVal) {
-        properties.thought = { rich_text: richText(thoughtVal) }
+        properties["thought"] = { rich_text: richText(thoughtVal) }
+      }
+      if (authorVal) {
+        properties["author"] = { rich_text: richText(authorVal) }
       }
 
       const page = await notion.pages.create({
@@ -201,15 +205,27 @@ export async function POST(request: Request) {
     if (type === "interview") {
       const { keyword = "", question = "", answer = "" } = payload
       const titleText = keyword.trim() || "면접 답변"
-      const children = [quoteBlock(question.trim() || "(질문 없음)"), paragraphBlock(answer.trim() || "(답변 없음)")]
+      const keywordVal = String(keyword ?? "").trim()
+      const questionVal = String(question ?? "").trim()
+      const answerVal = String(answer ?? "").trim()
+      const children = [quoteBlock(questionVal || "(질문 없음)"), paragraphBlock(answerVal || "(답변 없음)")]
+
+      const properties: Record<string, { title: ReturnType<typeof richText> } | { rich_text: ReturnType<typeof richText> }> = {
+        [titleProp]: { title: richText(titleText) },
+      }
+      if (keywordVal) {
+        properties["keyword"] = { rich_text: richText(keywordVal) }
+      }
+      if (questionVal) {
+        properties["question"] = { rich_text: richText(questionVal) }
+      }
+      if (answerVal) {
+        properties["answer"] = { rich_text: richText(answerVal) }
+      }
 
       const page = await notion.pages.create({
         parent: { data_source_id: dataSourceId },
-        properties: {
-          [titleProp]: {
-            title: richText(titleText),
-          },
-        },
+        properties,
         children,
       })
       return NextResponse.json({ ok: true, pageId: page.id, url: "url" in page ? page.url : null })
