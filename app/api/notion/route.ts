@@ -185,7 +185,7 @@ export async function POST(request: Request) {
         [titleProp]: { title: richText(titleText) },
       }
       if (quoteVal) {
-        properties["quate"] = { rich_text: richText(quoteVal) }
+        properties["quote"] = { rich_text: richText(quoteVal) }
       }
       if (thoughtVal) {
         properties["thought"] = { rich_text: richText(thoughtVal) }
